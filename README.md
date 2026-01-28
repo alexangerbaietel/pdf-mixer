@@ -1,62 +1,151 @@
-# PDF Mixer Pro
+# PDF Mixer Pro (NO-METADATA)
 
-Un utilitar desktop (Tkinter) pentru operații rapide pe fișiere PDF: unire, intercalare, extragere/ștergere/rotire pagini, inversare ordine și split la N pagini. Ediție „NO-METADATA” — nu modifică intenționat metadatele fișierelor PDF rezultate.
+**PDF Mixer Pro** este o aplicație desktop (Python + Tkinter) pentru lucrul rapid cu PDF-uri: îmbinare, intercalare, extragere/ștergere pagini, rotire, inversare, split – plus conversii **Word/Excel/PowerPoint → PDF** și **Poze → PDF**.  
+Include o filozofie **NO-METADATA**: după export, PDF-urile sunt „rescrise” doar cu paginile, pentru a elimina metadatele (best-effort).
 
-## ✨ Caracteristici
+---
 
-* **Unește** mai multe PDF-uri în serie, în ordinea din listă
-* **Intercalează** două PDF-uri (alternativ sau pe criterii impare/pare, cu offset configurabil)
-* **Extrage** pagini după intervale (ex. `1-3,5,10`)
-* **Șterge** pagini după intervale
-* **Rotește** pagini (90/180/270°)
-* **Inversează** ordinea paginilor
-* **Împarte** un PDF în fișiere de câte **N** pagini
-* **Drag & Drop** opțional (prin `tkinterdnd2`)
-* UI modern dark, cu 3 palete (Indigo/Teal/Amber) și bară de progres non-modală
-* **Nu** scrie metadate PDF — „NO-METADATA build”
+## Funcții principale
 
-## 📦 Instalare
+### PDF Tools
+- **Unește în serie** (n PDF-uri) în ordinea din listă
+- **Intercalează 2 PDF-uri** (alternativ / impare+pare etc.)
+- **Extrage pagini** (intervale: `1-3,5,10`)
+- **Șterge pagini** (intervale: `2,5-7`)
+- **Rotire pagini** (90/180/270, pe intervale)
+- **Inversează paginile** (ordine descrescătoare)
+- **Split din N în N pagini**
 
-Pe Windows, aplicația se construiește/rulează direct cu scriptul inclus **`build.bat`**.
-Acesta se ocupă de:
+### Convert
+- **PowerPoint → PDF**
+- **Excel → PDF (all sheets, landscape)**
+- **Word → PDF**
+- **Poze → PDF** (mai multe imagini, 1 pagină/imagine, cu opțiuni: A4/A3/Letter/Legal, margini, DPI etc.)
 
-* instalarea pachetelor necesare (`pypdf`, `tkinterdnd2`, `pyinstaller`)
-* generarea executabilului final (`PDF Mixer Pro.exe`)
+### NO-METADATA (sanitizer)
+După export (merge/convert/poze etc.), aplicația rulează un „sanitizer” care:
+- rescrie PDF-ul doar cu paginile
+- încearcă să elimine `/Info` și XMP metadata (best-effort)
 
-### Pași
+---
 
-1. Descarcă repository-ul (sau clonează-l din GitHub).
-2. Rulează **`build.bat`** prin dublu click sau din Command Prompt.
-3. După finalizare, vei găsi aplicația în folderul **`dist\PDF Mixer Pro.exe`**.
+## Cerințe
 
-Nu este nevoie să instalezi manual dependențe — scriptul se ocupă de tot.
+- Python 3.9+ (recomandat)
+- Dependențe:
+  - `pypdf`
+  - `pillow` (pentru Poze → PDF)
+  - `tkinterdnd2` (opțional, pentru Drag & Drop)
+  - `pywin32` (opțional, doar Windows, pentru conversie Office prin COM)
+- Fallback conversie:
+  - **LibreOffice** instalat (soffice în PATH) sau setat prin `SOFFICE_PATH`
 
-## 🚀 Rulare
+---
 
-După ce build-ul s-a terminat:
+## Instalare
 
-* mergi în `dist\`
-* pornește **`PDF Mixer Pro.exe`**
+### 1) Creează un mediu virtual (recomandat)
+```bash
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# Linux/Mac:
+source .venv/bin/activate
+```
 
-Se deschide interfața grafică, gata de folosit.
+### 2) Instalează dependențele
 
-## 🖱️ Utilizare
+```bash
+pip install pypdf pillow
+```
 
-1. **Adaugă** PDF-uri (butonul „➕ Adaugă PDF-uri” sau drag & drop).
-2. **Rearanjează** ordinea din listă.
-3. Alege o **acțiune rapidă**:
+### 3) (Opțional) Drag & Drop
 
-   * unire, intercalare, extragere, ștergere, rotire, inversare, split.
-4. Salvează fișierul rezultat.
+```bash
+pip install tkinterdnd2
+```
 
-## ⌨️ Shortcuts
+### 4) (Windows) Conversie Office prin COM (fără ferestre)
 
-* `Ctrl + O` – Adaugă PDF-uri
-* `Ctrl + Q` – Ieșire
+```bash
+pip install pywin32
+```
 
-## ℹ️ „Despre”
+> Dacă `pywin32` sau Microsoft Office nu sunt disponibile, conversia se face prin **LibreOffice headless** (fallback).
 
-* **Nume:** `PDF Mixer Pro` **v1.0**
-* **Autor:** Alex Șerban Dâmbu — **Dâmbu Software**
-* **Copyright:** © 2025. Toate drepturile rezervate.
+---
+
+## LibreOffice fallback (soffice)
+
+Aplicația caută `soffice` astfel:
+
+1. variabila de mediu `SOFFICE_PATH`
+2. `soffice` / `soffice.exe` în PATH
+3. locații comune (Windows/Mac/Linux)
+
+### Setare `SOFFICE_PATH` (Windows exemplu)
+
+```bat
+setx SOFFICE_PATH "C:\Program Files\LibreOffice\program\soffice.exe"
+```
+
+---
+
+## Rulare
+
+```bash
+python pdf_mixer_pro.py
+```
+
+(Dacă fișierul are alt nume, rulează scriptul respectiv.)
+
+---
+
+## Utilizare rapidă
+
+### PDF-uri
+
+1. Apasă **➕ Adaugă PDF-uri** (sau drag & drop dacă ai `tkinterdnd2`)
+2. Reordonează lista (Sus/Jos) sau sortează
+3. Alege acțiunea din partea dreaptă (Merge/Interleave/Extract etc.)
+
+### Convert (Word/Excel/PPT)
+
+* Din meniul **Convert** sau din „Convert rapid”:
+
+  * selectezi fișierele
+  * alegi folderul de output
+  * aplicația produce PDF-uri și rulează sanitizer-ul NO-METADATA
+
+### Poze → PDF
+
+* Selectezi imaginile
+* Alegi opțiunile (dimensiune pagină, margini, DPI etc.)
+* Salvezi PDF-ul final
+
+---
+
+## Notițe / Limitări
+
+* Bara de progres este **indeterminate** (spinner). Unele operații grele pot bloca UI-ul (Tkinter este single-thread).
+* Conversia Office prin COM funcționează doar pe **Windows** cu Microsoft Office instalat.
+* Fallback-ul LibreOffice necesită instalare LibreOffice și acces la `soffice`.
+
+---
+
+## Branding
+
+* App: **PDF Mixer Pro**
+* Company: **Dâmbu Software**
+* Author: **Alex Șerban Dâmbu**
+* Copyright: **(c) 2026**
+* All rights reserved.
+
+---
+
+## Licență
+
+Acest software este furnizat **„ca atare”**, fără garanții.
+
+```
 
