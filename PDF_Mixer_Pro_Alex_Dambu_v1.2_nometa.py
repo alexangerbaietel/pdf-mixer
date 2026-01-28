@@ -68,7 +68,7 @@ if platform.system() == "Windows":
 
 # ------------------ Branding & App Consts ------------------
 APP_NAME = "PDF Mixer Pro"
-APP_VERSION = "1.1"
+APP_VERSION = "1.2"
 BRAND_AUTHOR = "Alex Șerban Dâmbu"
 BRAND_COMPANY = "Dâmbu Software"
 COPYRIGHT_YEAR = "2025"
